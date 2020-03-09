@@ -2,5 +2,41 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
-  "projects": {}
+  "projects": {
+    "savvato-careerpath-component": {
+      "projectType": "library",
+      "root": "projects/savvato-careerpath-component",
+      "sourceRoot": "projects/savvato-careerpath-component/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/savvato-careerpath-component/tsconfig.lib.json",
+            "project": "projects/savvato-careerpath-component/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/savvato-careerpath-component/src/test.ts",
+            "tsConfig": "projects/savvato-careerpath-component/tsconfig.spec.json",
+            "karmaConfig": "projects/savvato-careerpath-component/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/savvato-careerpath-component/tsconfig.lib.json",
+              "projects/savvato-careerpath-component/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    }},
+  "defaultProject": "savvato-careerpath-component"
 }

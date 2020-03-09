@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "savvato-careerpath-component": [
+        "dist/savvato-careerpath-component"
+      ],
+      "savvato-careerpath-component/*": [
+        "dist/savvato-careerpath-component/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

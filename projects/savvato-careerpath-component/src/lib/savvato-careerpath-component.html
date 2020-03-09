@@ -1,0 +1,43 @@
+<ion-content>
+	<ion-card>
+		<ion-card-header>
+			<ion-card-title>Name: {{getCareerGoalName()}}</ion-card-title>
+			<!-- <ion-button class="" (click)="onEditCareerGoalBtnClick()">Edit</ion-button> -->
+		<ion-item>
+			<ion-label>Collapse To Level</ion-label>
+			<ion-select placeholder="Select One" slot="start" interface="popover" [(ngModel)]="selectedCollapseToLevel">
+				<ion-select-option value="1">Career Goal</ion-select-option>
+				<ion-select-option value="2">Path</ion-select-option>
+				<ion-select-option value="3">Milestone</ion-select-option>
+				<ion-select-option value="4">Labour</ion-select-option>
+				<ion-select-option value="5">Full Detail</ion-select-option>
+			</ion-select>
+		</ion-item>
+	</ion-card-header>
+	
+	<ion-card-content class="orangeBackground" *ngFor="let cg of getCareerGoal()">
+		<span class="pathName">{{getCareerGoalName()}}</span>
+		<ion-card-content class="purpleBackground" *ngFor="let path of getCareerGoalPaths(cg)">
+			<!-- <span class="pathName" (click)="onPathNameClick(path)">{{path['name']}}</span><br/> -->
+			<span class="pathName">{{path['name']}}</span><br/>
+			<ion-card-content class="greenBackground" *ngFor="let milestone of getMilestonesFromPath(path)">
+				<!-- <span class="milestoneName" (click)="onMilestoneNameClick(milestone)">{{milestone['name']}}</span><br/> -->
+				<span class="milestoneName" >{{milestone['name']}}</span><br/>
+				<ion-card-content class="yellowBackground" *ngFor="let labour of getLaboursFromMilestone(milestone)">
+					<ion-card-content class="blueBackground">
+						<!-- <span class="labourName" (click)="onLabourNameClick(labour)">{{labour['name']}}</span><br/> -->
+						<span class="labourName" >{{labour['name']}}</span><br/>
+						<!-- <span class="questionText" *ngFor="let q of getQuestionsFromLabour(labour)" (click)="onQuestionClicked(q)"> -->
+						<span class="questionText" *ngFor="let q of getQuestionsFromLabour(labour)" >
+							{{ q.text }}<br/>
+							{{ q.description }}<br/>
+							<br/><br/>
+						</span>
+					</ion-card-content>
+				</ion-card-content>
+			</ion-card-content>
+		</ion-card-content>
+	</ion-card-content>
+</ion-card>
+
+</ion-content>
