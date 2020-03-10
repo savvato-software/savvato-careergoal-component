@@ -12,6 +12,19 @@
 				<ion-select-option value="4">Labour</ion-select-option>
 				<ion-select-option value="5">Full Detail</ion-select-option>
 			</ion-select>
+	      <ion-radio-group *ngIf="!hideAnswerQualityFilters" [(ngModel)]="answerQualityFilter">
+
+	          <ion-label class="aqfLabel">Incorrectly</ion-label>
+	          <ion-radio slot="start" value="incorrect" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+
+	          <ion-label class="aqfLabel">Correctly</ion-label>
+	          <ion-radio slot="start" value="correct" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+
+	          <ion-label class="aqfLabel">Either</ion-label>
+	          <ion-radio slot="start" value="asked" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+
+	      </ion-radio-group>
+			
 		</ion-item>
 	</ion-card-header>
 	
