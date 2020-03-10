@@ -1,0 +1,6 @@
+
+To build:
+ng build savvato-careerpath-component && cd dist/savvato-careerpath-component/ && npm pack && cd - && date
+
+
+
