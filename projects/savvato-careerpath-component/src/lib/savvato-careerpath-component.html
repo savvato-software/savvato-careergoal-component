@@ -5,7 +5,7 @@
 			<!-- <ion-button class="" (click)="onEditCareerGoalBtnClick()">Edit</ion-button> -->
 		<ion-item>
 			<ion-label>Collapse To Level</ion-label>
-			<ion-select placeholder="Select One" slot="start" interface="popover" [(ngModel)]="selectedCollapseToLevel">
+			<ion-select [placeholder]="getSelectedCollapseToLevelText()" slot="start" interface="popover" [(ngModel)]="selectedCollapseToLevel" [value]="getSelectedCollapseToLevel()">
 				<ion-select-option value="1">Career Goal</ion-select-option>
 				<ion-select-option value="2">Path</ion-select-option>
 				<ion-select-option value="3">Milestone</ion-select-option>

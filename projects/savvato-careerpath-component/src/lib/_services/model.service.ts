@@ -90,6 +90,10 @@ export class ModelService {
 		return funcName;
 	}
 
+	getAnswerQualityFilter() {
+		return this.answerQualityFilter;
+	}
+
 	setAnswerQualityFilter(filter) {
 		this._functionPromiseService.reset(this.getQuestionCountFuncName(this.answerQualityFilter));
 		this.answerQualityFilter = filter;

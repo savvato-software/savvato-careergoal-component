@@ -61,12 +61,27 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
 
         self._functionPromiseService.initFunc("getQuestionsFromLabourFunc", (data) => {
           return new Promise((resolve, reject) => {
+            if (self._modelService.getAnswerQualityFilter() === self._modelService.NO_FILTER) {
+              console.log("@@@ gqflf had no filter set, returning the full data labors questions set", data['labour']['questions'])
+              resolve(data['labour']['questions']);
+            }
+
             self._modelService.getFilteredListOfQuestions(self.userId).then((flq: [{}]) => {
+              console.log("@@@ data ", data)
+
               if (data['labour']) {
-                resolve(data['labour']['questions'].map(
-                (q) => {
-                  flq.map((q) => q['id']).includes(q['id']);
-                }))
+                
+                console.log("@@@@ flq", flq)
+                console.log("@@@@ dataLaborQuestions", data['labour']['questions'])
+
+                let res = data['labour']['questions'].filter(
+                  (q) => {
+                    return flq.map((q1) => q1['id']).includes(q['id']);
+                  })
+
+                console.log("@@@@ res ", res)
+
+                resolve(res)
               } else {
                   reject();
               }
@@ -91,6 +106,7 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   LEVEL_QUESTION = 5
   getQuestionsFromLabour(labour){
     if (labour && this.myLevelIsShowing(this.LEVEL_QUESTION)) {
+      console.log("-=-=-=-=-=-=+++++-=-=+++=DDD")
       return this._functionPromiseService.get("getQuestionsFromLabourFunc"+labour['id'], "getQuestionsFromLabourFunc", {labour: labour});
     } else {
       return [ ];
@@ -123,10 +139,10 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
     if (cg && this.myLevelIsShowing(this.LEVEL_PATHS)) {
       let rtn = cg['paths'].filter((p) => self._modelService.pathContainsFilteredQuestion(self.userId, p));
 
-      console.log("getCareerGoalPaths rtn ", rtn)
+      // console.log("getCareerGoalPaths rtn ", rtn)
       return rtn;
     } else {
-      console.log("getCareerGoalPaths RETURNING EMPTY ")
+      // console.log("getCareerGoalPaths RETURNING EMPTY ")
       return [ ];
     }
   }
@@ -135,10 +151,10 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   getCareerGoal() {
     if (this.getCareerGoalProviderFunction && this.myLevelIsShowing(this.LEVEL_CAREER_GOAL)) {
       let cg = this.getCareerGoalProviderFunction();
-      console.log("getCareerGoalProviderFunction returned ", cg)
+      // console.log("getCareerGoalProviderFunction returned ", cg)
       return [cg];
     } else {
-      console.log("no careerGoalProvider function!! returning ", []);
+      // console.log("no careerGoalProvider function!! returning ", []);
       return [ ];
     }
   }
@@ -146,6 +162,16 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   selectedCollapseToLevel = this.LEVEL_LABOURS;
   myLevelIsShowing(myLevel) {
     return this.selectedCollapseToLevel * 1.0 >= myLevel;
+  }
+
+  getSelectedCollapseToLevel() {
+    console.log("@@@ getSelectedCollapseToLevel rtn ", this.selectedCollapseToLevel)
+    return this.selectedCollapseToLevel;
+  }
+
+  collapseLevelTitles = {1: 'Career Goal', 2: 'Path', 3: 'Milestone', 4: 'Labour', 5: 'Full Detail'};
+  getSelectedCollapseToLevelText() {
+    return this.collapseLevelTitles[this.selectedCollapseToLevel * 1];
   }
 
   onFocus(evt) {
