@@ -51,6 +51,14 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
 
         self.getCareerGoalProviderFunction = ctrl.getCareerGoalProviderFunction;
 
+        self._modelService.getAskedQuestions(self.userId).then((askedQuestions: [{}]) => {
+          console.log("AQ: AQ: askedQuestions", askedQuestions);
+          if (!askedQuestions.length) {
+            self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
+            self.hideAnswerQualityFilters = true;
+          }
+        })
+
         self._functionPromiseService.initFunc("getQuestionsFromLabourFunc", (data) => {
           return new Promise((resolve, reject) => {
             self._modelService.getFilteredListOfQuestions(self.userId).then((flq: [{}]) => {
@@ -65,14 +73,6 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
             })
           })
         })
-      })
-
-      self._modelService.getAskedQuestions(self.userId).then((askedQuestions: [{}]) => {
-        console.log("AQ: AQ: askedQuestions", askedQuestions);
-        if (!askedQuestions.length) {
-          self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
-          self.hideAnswerQualityFilters = true;
-        }
       })
   }
 
