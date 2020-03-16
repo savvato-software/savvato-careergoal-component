@@ -1,6 +1,6 @@
 {
-  "name": "savvato-careerpath-component",
-  "version": "0.0.45",
+  "name": "@savvato-software/savvato-careerpath-component",
+  "version": "0.0.47",
   "peerDependencies": {
     "@angular/common": "^8.2.14",
     "@angular/core": "^8.2.14"
