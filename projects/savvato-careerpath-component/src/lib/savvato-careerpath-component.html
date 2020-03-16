@@ -3,34 +3,44 @@
 		<ion-card-header>
 			<ion-card-title>Name: {{getCareerGoalName()}}</ion-card-title>
 			<!-- <ion-button class="" (click)="onEditCareerGoalBtnClick()">Edit</ion-button> -->
-		<ion-item>
-			<ion-label>Collapse To Level</ion-label>
-			<ion-select [placeholder]="getSelectedCollapseToLevelText()" slot="start" interface="popover" [(ngModel)]="selectedCollapseToLevel" [value]="getSelectedCollapseToLevel()">
-				<ion-select-option value="1">Career Goal</ion-select-option>
-				<ion-select-option value="2">Path</ion-select-option>
-				<ion-select-option value="3">Milestone</ion-select-option>
-				<ion-select-option value="4">Labour</ion-select-option>
-				<ion-select-option value="5">Full Detail</ion-select-option>
-			</ion-select>
-		</ion-item>
-		<ion-item *ngIf="!hideAnswerQualityFilters">
-	      <ion-radio-group [(ngModel)]="answerQualityFilter">
-	          		<ion-item>
-	          			<ion-label class="aqfLabel">Incorrectly</ion-label>
-	          <ion-radio slot="start" value="incorrect" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
-	      </ion-item>
-	      		<ion-item>
-	          <ion-label class="aqfLabel">Correctly</ion-label>
-	          <ion-radio slot="start" value="correct" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
-	          		</ion-item>
-	          				<ion-item>
-	          <ion-label class="aqfLabel">Either</ion-label>
-	          <ion-radio slot="start" value="asked" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
-	      </ion-item>
-	      </ion-radio-group>
-		</ion-item>
-	</ion-card-header>
-	
+			<ion-item>
+				<ion-label>Collapse To Level</ion-label>
+				<ion-select [placeholder]="getSelectedCollapseToLevelText()" slot="start" interface="popover" [(ngModel)]="selectedCollapseToLevel" [value]="getSelectedCollapseToLevel()">
+					<ion-select-option value="1">Career Goal</ion-select-option>
+					<ion-select-option value="2">Path</ion-select-option>
+					<ion-select-option value="3">Milestone</ion-select-option>
+					<ion-select-option value="4">Labour</ion-select-option>
+					<ion-select-option value="5">Full Detail</ion-select-option>
+				</ion-select>
+			</ion-item>
+			<ion-item *ngIf="!hideAnswerQualityFilters">
+				<ion-radio-group [(ngModel)]="answerQualityFilter" [value]="getSelectedAnswerQualityFilter()">
+					<ion-grid>
+						<ion-row>
+							<ion-col>
+								<ion-item lines="none">
+									<ion-label class="aqfLabel">Incorrectly</ion-label>
+									<ion-radio slot="start" value="incorrect" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+								</ion-item>
+							</ion-col>
+							<ion-col>
+								<ion-item lines="none">
+									<ion-label class="aqfLabel">Correctly</ion-label>
+									<ion-radio slot="start" value="correct" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+								</ion-item>
+							</ion-col>
+							<ion-col>
+								<ion-item lines="none">
+									<ion-label class="aqfLabel">Either</ion-label>
+									<ion-radio slot="start" value="asked" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+								</ion-item>
+								</ion-col>
+							</ion-row>
+						</ion-grid>
+				</ion-radio-group>
+			</ion-item>
+		</ion-card-header>
+
 	<ion-card-content class="orangeBackground" *ngFor="let cg of getCareerGoal()">
 		<span class="pathName">{{getCareerGoalName()}}</span>
 		<ion-card-content class="purpleBackground" *ngFor="let path of getCareerGoalPaths(cg)">

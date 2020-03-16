@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { CareerGoalService } from 'savvato-javascript-services'
-import { FunctionPromiseService } from 'savvato-javascript-services'
+import { CareerGoalService } from '@savvato-software/savvato-javascript-services'
+import { FunctionPromiseService } from '@savvato-software/savvato-javascript-services'
 import { UserService } from './_services/user.service'
 import { ModelService } from './_services/model.service'
 
@@ -165,8 +165,11 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   }
 
   getSelectedCollapseToLevel() {
-    console.log("@@@ getSelectedCollapseToLevel rtn ", this.selectedCollapseToLevel)
-    return this.selectedCollapseToLevel;
+    return this.selectedCollapseToLevel; // returns the value attribute of the selected choice
+  }
+
+  getSelectedAnswerQualityFilter() {
+    return this._modelService.getAnswerQualityFilter();
   }
 
   collapseLevelTitles = {1: 'Career Goal', 2: 'Path', 3: 'Milestone', 4: 'Labour', 5: 'Full Detail'};

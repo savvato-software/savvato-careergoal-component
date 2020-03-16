@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { ApiService } from 'savvato-javascript-services'
-import { FunctionPromiseService } from 'savvato-javascript-services'
+import { ApiService } from '@savvato-software/savvato-javascript-services'
+import { FunctionPromiseService } from '@savvato-software/savvato-javascript-services'
 
 @Injectable({
 	providedIn: 'root'
@@ -74,7 +74,7 @@ export class ModelService {
 		});
 	}
 
-	answerQualityFilter = this.GET_ASKED_QUESTIONS;
+	answerQualityFilter = "asked"
 	getQuestionCountFuncName(filter) {
 		let funcName = undefined;
 		let self = this;
@@ -104,14 +104,16 @@ export class ModelService {
 	}
 
 	getFilteredListOfQuestions(userId) {
-		return this._functionPromiseService.waitAndGet(this.answerQualityFilter, this.answerQualityFilter, {'userId': userId});
+		let funcName = this.getQuestionCountFuncName(this.answerQualityFilter);
+		return this._functionPromiseService.waitAndGet(funcName, funcName, {'userId': userId});
 	}
 
 	labourContainsFilteredQuestion(userId, labour) {
 		if (this.answerQualityFilter === this.NO_FILTER)
 			return true;
 
-		let flq = this._functionPromiseService.get(this.answerQualityFilter, this.answerQualityFilter, {userId: userId});
+		let funcName = this.getQuestionCountFuncName(this.answerQualityFilter);
+		let flq = this._functionPromiseService.get(funcName, funcName, {userId: userId});
 
 		if (flq) 
 			return this._functionPromiseService.get(this.LABOUR_CONTAINS_FILTERED_QUESTIONS+labour['id'], this.LABOUR_CONTAINS_FILTERED_QUESTIONS, {userId: userId, labour: labour, flq: flq});

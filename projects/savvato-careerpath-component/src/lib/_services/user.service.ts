@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from 'savvato-javascript-services'
+import { ApiService } from '@savvato-software/savvato-javascript-services'
 
 @Injectable({
   providedIn: 'root'
