@@ -14,25 +14,25 @@
 				</ion-select>
 			</ion-item>
 			<ion-item *ngIf="!hideAnswerQualityFilters">
-				<ion-radio-group [(ngModel)]="answerQualityFilter" [value]="getSelectedAnswerQualityFilter()">
+				<ion-radio-group [value]="getSelectedAnswerQualityFilter()" (ionChange)="onAnswerQualityFilterChange($event)">
 					<ion-grid>
 						<ion-row>
 							<ion-col>
 								<ion-item lines="none">
 									<ion-label class="aqfLabel">Incorrectly</ion-label>
-									<ion-radio slot="start" value="incorrect" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+									<ion-radio slot="start" value="incorrect" ></ion-radio>
 								</ion-item>
 							</ion-col>
 							<ion-col>
 								<ion-item lines="none">
 									<ion-label class="aqfLabel">Correctly</ion-label>
-									<ion-radio slot="start" value="correct" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+									<ion-radio slot="start" value="correct" ></ion-radio>
 								</ion-item>
 							</ion-col>
 							<ion-col>
 								<ion-item lines="none">
 									<ion-label class="aqfLabel">Either</ion-label>
-									<ion-radio slot="start" value="asked" (ionBlur)="onBlur($event)" (ionFocus)="onFocus($event)"></ion-radio>
+									<ion-radio slot="start" value="asked" ></ion-radio>
 								</ion-item>
 								</ion-col>
 							</ion-row>
@@ -43,6 +43,7 @@
 
 	<ion-card-content class="orangeBackground" *ngFor="let cg of getCareerGoal()">
 		<span class="pathName">{{getCareerGoalName()}}</span>
+		<div *ngIf="getCareerGoalPaths(cg).length === 0"><br/><br/>None of the questions you've been asked are a match for this path, and this filter.<br/><br/></div>
 		<ion-card-content class="purpleBackground" *ngFor="let path of getCareerGoalPaths(cg)">
 			<!-- <span class="pathName" (click)="onPathNameClick(path)">{{path['name']}}</span><br/> -->
 			<span class="pathName">{{path['name']}}</span><br/>

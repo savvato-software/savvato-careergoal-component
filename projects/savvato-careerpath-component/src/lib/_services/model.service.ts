@@ -66,10 +66,11 @@ export class ModelService {
 			return new Promise((resolve, reject) => {
 				let flq = data['flq'];
 
-				resolve(data['labour']['questions'].map(
-			        (q) => {
-			          flq.map((q) => q['id']).includes(q['id']);
-			        }).length > 0)
+				// TODO: This same code appears in savvato-careerpath-component. Find a common place for it
+				resolve(data['labour']['questions'].filter(
+                  (q) => {
+                    return flq.map((q1) => q1['id']).includes(q['id']);
+                  }).length > 0)
 			})
 		});
 	}
@@ -95,7 +96,6 @@ export class ModelService {
 	}
 
 	setAnswerQualityFilter(filter) {
-		this._functionPromiseService.reset(this.getQuestionCountFuncName(this.answerQualityFilter));
 		this.answerQualityFilter = filter;
 	}
 
@@ -105,7 +105,7 @@ export class ModelService {
 
 	getFilteredListOfQuestions(userId) {
 		let funcName = this.getQuestionCountFuncName(this.answerQualityFilter);
-		return this._functionPromiseService.waitAndGet(funcName, funcName, {'userId': userId});
+		return this._functionPromiseService.waitAndGet(funcName, funcName, {userId: userId});
 	}
 
 	labourContainsFilteredQuestion(userId, labour) {
@@ -115,30 +115,34 @@ export class ModelService {
 		let funcName = this.getQuestionCountFuncName(this.answerQualityFilter);
 		let flq = this._functionPromiseService.get(funcName, funcName, {userId: userId});
 
-		if (flq) 
-			return this._functionPromiseService.get(this.LABOUR_CONTAINS_FILTERED_QUESTIONS+labour['id'], this.LABOUR_CONTAINS_FILTERED_QUESTIONS, {userId: userId, labour: labour, flq: flq});
+		if (flq) {
+			let rtn = this._functionPromiseService.get(this.LABOUR_CONTAINS_FILTERED_QUESTIONS+labour['id']+this.answerQualityFilter, this.LABOUR_CONTAINS_FILTERED_QUESTIONS, {userId: userId, labour: labour, flq: flq});
+			return rtn;
+		}
 
 		return true;
 	}
 
 	milestoneContainsFilteredQuestion(userId, milestone) {
 		let self = this;
-		return milestone['labours'].map((l) => {
-			self.labourContainsFilteredQuestion(userId, l);
+		let rtn = milestone['labours'].filter((l) => {
+			return self.labourContainsFilteredQuestion(userId, l);
 		}).length > 0;
+		return rtn;
 	}
 
 	pathContainsFilteredQuestion(userId, path) {
 		let self = this;
-		return path['milestones'].map((m) => {
-			self.milestoneContainsFilteredQuestion(userId, m);
+		let rtn = path['milestones'].filter((m) => {
+			return self.milestoneContainsFilteredQuestion(userId, m);
 		}).length > 0;
+		return rtn;
 	}
 
 	careerGoalContainsFilteredQuestion(userId, cg) {
 		let self = this;
-		return cg['paths'].map((p) => {
-			self.careerGoalContainsFilteredQuestion(userId, p);
+		return cg['paths'].filter((p) => {
+			return self.pathContainsFilteredQuestion(userId, p);
 		}).length > 0;
 	}
 }
