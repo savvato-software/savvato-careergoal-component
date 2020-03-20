@@ -45,41 +45,46 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
     self.ctrl.then((ctrl) => {
         self.environment = ctrl.getEnv();
         self._modelService._init(ctrl.getEnv());
-
-        self.user = ctrl.getUser();
-        self.userId = self.user['id'];
-
+        
         self.getCareerGoalProviderFunction = ctrl.getCareerGoalProviderFunction;
 
-        self._modelService.getAskedQuestions(self.userId).then((askedQuestions: [{}]) => {
-          if (!askedQuestions.length) {
-            self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
-            self.hideAnswerQualityFilters = true;
-          }
-        })
+        if (!ctrl.getUser) {
+          self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
+          self.hideAnswerQualityFilters = true;          
+        } else {
+          self.user = ctrl.getUser();
+          self.userId = self.user['id'];
 
-        self._functionPromiseService.initFunc("getQuestionsFromLabourFunc", (data) => {
-          return new Promise((resolve, reject) => {
-            if (self._modelService.getAnswerQualityFilter() === self._modelService.NO_FILTER) {
-              resolve(data['labour']['questions']);
+          self._modelService.getAskedQuestions(self.userId).then((askedQuestions: [{}]) => {
+            if (!askedQuestions.length) {
+              self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
+              self.hideAnswerQualityFilters = true;
             }
+          })
 
-            self._modelService.getFilteredListOfQuestions(self.userId).then((flq: [{}]) => {
-              if (data['labour']) {
-                
-                // TODO: This same code appears in model.service. Find a common place for it
-                let res = data['labour']['questions'].filter(
-                  (q) => {
-                    return flq.map((q1) => q1['id']).includes(q['id']);
-                  })
-
-                resolve(res)
-              } else {
-                  reject();
+          self._functionPromiseService.initFunc("getQuestionsFromLabourFunc", (data) => {
+            return new Promise((resolve, reject) => {
+              if (self._modelService.getAnswerQualityFilter() === self._modelService.NO_FILTER) {
+                resolve(data['labour']['questions']);
               }
+
+              self._modelService.getFilteredListOfQuestions(self.userId).then((flq: [{}]) => {
+                if (data['labour']) {
+                  
+                  // TODO: This same code appears in model.service. Find a common place for it
+                  let res = data['labour']['questions'].filter(
+                    (q) => {
+                      return flq.map((q1) => q1['id']).includes(q['id']);
+                    })
+
+                  resolve(res)
+                } else {
+                    reject();
+                }
+              })
             })
           })
-        })
+        }
       })
   }
 
@@ -98,7 +103,14 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   LEVEL_QUESTION = 5
   getQuestionsFromLabour(labour){
     if (labour && this.myLevelIsShowing(this.LEVEL_QUESTION)) {
-      let rtn = this._functionPromiseService.get("getQuestionsFromLabourFunc"+labour['id'], "getQuestionsFromLabourFunc", {labour: labour});
+      let rtn = undefined;
+
+      if (this.user) {
+        rtn = this._functionPromiseService.get("getQuestionsFromLabourFunc"+labour['id'], "getQuestionsFromLabourFunc", {labour: labour});
+      } else {
+        rtn = labour['questions'] || [ ];
+      }
+
       return rtn;
     } else {
       return [ ];
@@ -109,7 +121,14 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   getLaboursFromMilestone(milestone) {
     let self = this;
     if (milestone && this.myLevelIsShowing(this.LEVEL_LABOURS)) {
-      let rtn = milestone['labours'].filter((l) => self._modelService.labourContainsFilteredQuestion(self.userId, l));
+      let rtn = undefined;
+
+      if (this.user) {
+        rtn = milestone['labours'].filter((l) => self._modelService.labourContainsFilteredQuestion(self.userId, l));
+      } else {
+        rtn = milestone['labours'] || [ ];
+      }
+
       return rtn;
     } else {
       return [ ];
@@ -120,7 +139,14 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   getMilestonesFromPath(path) {
     let self = this;
     if (path && this.myLevelIsShowing(this.LEVEL_MILESTONE)) {
-      let rtn = path['milestones'].filter((m) => self._modelService.milestoneContainsFilteredQuestion(self.userId, m));
+      let rtn = undefined;
+
+      if (this.user) {
+        rtn = path['milestones'].filter((m) => self._modelService.milestoneContainsFilteredQuestion(self.userId, m));
+      } else {
+        rtn = path['milestones'] || [ ];
+      }
+
       return rtn;
     } else {
       return [ ];
@@ -131,7 +157,15 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   getCareerGoalPaths(cg) {
     let self = this;
     if (cg && this.myLevelIsShowing(this.LEVEL_PATHS)) {
-      let rtn = cg['paths'].filter((p) => self._modelService.pathContainsFilteredQuestion(self.userId, p));
+      let rtn = undefined;
+
+      if (this.user) {
+        rtn = cg['paths'].filter((p) => self._modelService.pathContainsFilteredQuestion(self.userId, p));
+      } else {
+        rtn = cg['paths'] || [ ];
+        console.log("## cg == ", cg, rtn);
+      }
+
       return rtn;
     } else {
       return [ ];
