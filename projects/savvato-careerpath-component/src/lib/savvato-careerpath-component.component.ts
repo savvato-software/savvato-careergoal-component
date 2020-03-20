@@ -24,6 +24,9 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   userId = undefined;
 
   onPathNameClickFunc = undefined;
+  onMilestoneNameClickFunc = undefined;
+  onLabourNameClickFunc = undefined;    
+  onQuestionClickFunc = undefined;
 
   funcKey = "careerpath-controller1Xr7";
 
@@ -47,9 +50,12 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
     self.ctrl.then((ctrl) => {
       self.environment = ctrl.getEnv();
       self._modelService._init(ctrl.getEnv());
-      
+
       self.getCareerGoalProviderFunction = ctrl.getCareerGoalProviderFunction;
       self.onPathNameClickFunc = ctrl.onPathNameClick;
+      self.onMilestoneNameClickFunc = ctrl.onMilestoneNameClick;
+      self.onLabourNameClickFunc = ctrl.onLabourNameClick;
+      self.onQuestionClickFunc = ctrl.onQuestionClick;
 
       if (!ctrl.getUser) {
         self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
@@ -73,7 +79,7 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
 
             self._modelService.getFilteredListOfQuestions(self.userId).then((flq: [{}]) => {
               if (data['labour']) {
-                
+
                 // TODO: This same code appears in model.service. Find a common place for it
                 let res = data['labour']['questions'].filter(
                   (q) => {
@@ -215,15 +221,19 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
     this.onPathNameClickFunc && this.onPathNameClickFunc(path);
   }
 
-/*  onMilestoneNameClick(milestone) {
-    this._router.navigate(['/milestones/display/' + milestone['id']]);
+  onMilestoneNameClick(milestone) {
+    this.onMilestoneNameClickFunc && this.onMilestoneNameClickFunc(milestone);
   }
 
   onLabourNameClick(labour) {
-    this._router.navigate(['/labours/display/' + labour['id']]);
+    this.onLabourNameClickFunc && this.onLabourNameClickFunc(labour);    
   }
 
-  onEditCareerGoalBtnClick() {
+  onQuestionClicked(q) {
+    this.onQuestionClickFunc && this.onQuestionClickFunc(q);    
+  }
+
+/*  onEditCareerGoalBtnClick() {
     this._router.navigate(['/career-goals/edit/' + this.careerGoalId]);
   }
   */

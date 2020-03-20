@@ -52,16 +52,12 @@
 		<div *ngIf="getCareerGoalPaths(cg).length === 0"><br/><br/>None of the questions you've been asked are a match for this path, and this filter.<br/><br/></div>
 		<ion-card-content class="purpleBackground" *ngFor="let path of getCareerGoalPaths(cg)">
 			<span class="pathName" (click)="onPathNameClick(path)">{{path['name']}}</span><br/>
-			<!-- <span class="pathName">{{path['name']}}</span><br/> -->
 			<ion-card-content class="greenBackground" *ngFor="let milestone of getMilestonesFromPath(path)">
-				<!-- <span class="milestoneName" (click)="onMilestoneNameClick(milestone)">{{milestone['name']}}</span><br/> -->
-				<span class="milestoneName" >{{milestone['name']}}</span><br/>
+				<span class="milestoneName" (click)="onMilestoneNameClick(milestone)">{{milestone['name']}}</span><br/>
 				<ion-card-content class="yellowBackground" *ngFor="let labour of getLaboursFromMilestone(milestone)">
 					<ion-card-content class="blueBackground">
-						<!-- <span class="labourName" (click)="onLabourNameClick(labour)">{{labour['name']}}</span><br/> -->
-						<span class="labourName" >{{labour['name']}}</span><br/>
-						<!-- <span class="questionText" *ngFor="let q of getQuestionsFromLabour(labour)" (click)="onQuestionClicked(q)"> -->
-						<span class="questionText" *ngFor="let q of getQuestionsFromLabour(labour)" >
+						<span class="labourName" (click)="onLabourNameClick(labour)">{{labour['name']}}</span><br/>
+						<span class="questionText" *ngFor="let q of getQuestionsFromLabour(labour)" (click)="onQuestionClicked(q)">
 							{{ q.text }}<br/>
 							{{ q.description }}<br/>
 							<br/><br/>
