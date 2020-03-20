@@ -2,6 +2,7 @@
 To build:
 cd projects/savvato-careerpath-component/ && npm version patch && cd - && ng build savvato-careerpath-component && cd dist/savvato-careerpath-component/ && npm pack && cd - && date
 
-
+To create an NPM release:
+    cd projects/savvato-careerpath-component/ && npm version patch && cd - && rm dist/ -rf && ng build savvato-careerpath-component && cd dist/savvato-careerpath-component/ && npm publish --access public && cd - && date
 
 
