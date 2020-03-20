@@ -28,11 +28,11 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   funcKey = "careerpath-controller1Xr7";
 
   constructor(private _router: Router,
-        private _route: ActivatedRoute,
-        private _userService: UserService,
-        private _modelService: ModelService,
-        private _functionPromiseService: FunctionPromiseService,
-        private _careerGoalService: CareerGoalService) {
+    private _route: ActivatedRoute,
+    private _userService: UserService,
+    private _modelService: ModelService,
+    private _functionPromiseService: FunctionPromiseService,
+    private _careerGoalService: CareerGoalService) {
 
   }
 
@@ -45,50 +45,50 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
     let self = this;
 
     self.ctrl.then((ctrl) => {
-        self.environment = ctrl.getEnv();
-        self._modelService._init(ctrl.getEnv());
-        
-        self.getCareerGoalProviderFunction = ctrl.getCareerGoalProviderFunction;
-        self.onPathNameClickFunc = ctrl.onPathNameClick;
+      self.environment = ctrl.getEnv();
+      self._modelService._init(ctrl.getEnv());
+      
+      self.getCareerGoalProviderFunction = ctrl.getCareerGoalProviderFunction;
+      self.onPathNameClickFunc = ctrl.onPathNameClick;
 
-        if (!ctrl.getUser) {
-          self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
-          self.hideAnswerQualityFilters = true;          
-        } else {
-          self.user = ctrl.getUser();
-          self.userId = self.user['id'];
+      if (!ctrl.getUser) {
+        self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
+        self.hideAnswerQualityFilters = true;          
+      } else {
+        self.user = ctrl.getUser();
+        self.userId = self.user['id'];
 
-          self._modelService.getAskedQuestions(self.userId).then((askedQuestions: [{}]) => {
-            if (!askedQuestions.length) {
-              self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
-              self.hideAnswerQualityFilters = true;
+        self._modelService.getAskedQuestions(self.userId).then((askedQuestions: [{}]) => {
+          if (!askedQuestions.length) {
+            self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
+            self.hideAnswerQualityFilters = true;
+          }
+        })
+
+        self._functionPromiseService.initFunc("getQuestionsFromLabourFunc", (data) => {
+          return new Promise((resolve, reject) => {
+            if (self._modelService.getAnswerQualityFilter() === self._modelService.NO_FILTER) {
+              resolve(data['labour']['questions']);
             }
-          })
 
-          self._functionPromiseService.initFunc("getQuestionsFromLabourFunc", (data) => {
-            return new Promise((resolve, reject) => {
-              if (self._modelService.getAnswerQualityFilter() === self._modelService.NO_FILTER) {
-                resolve(data['labour']['questions']);
+            self._modelService.getFilteredListOfQuestions(self.userId).then((flq: [{}]) => {
+              if (data['labour']) {
+                
+                // TODO: This same code appears in model.service. Find a common place for it
+                let res = data['labour']['questions'].filter(
+                  (q) => {
+                    return flq.map((q1) => q1['id']).includes(q['id']);
+                  })
+
+                resolve(res)
+              } else {
+                reject();
               }
-
-              self._modelService.getFilteredListOfQuestions(self.userId).then((flq: [{}]) => {
-                if (data['labour']) {
-                  
-                  // TODO: This same code appears in model.service. Find a common place for it
-                  let res = data['labour']['questions'].filter(
-                    (q) => {
-                      return flq.map((q1) => q1['id']).includes(q['id']);
-                    })
-
-                  resolve(res)
-                } else {
-                    reject();
-                }
-              })
             })
           })
-        }
-      })
+        })
+      }
+    })
   }
 
   getCareerGoalName() {
@@ -209,7 +209,7 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   }
 
 
-//  Provide user-defined handlers for these
+  //  Provide user-defined handlers for these
 
   onPathNameClick(path) {
     this.onPathNameClickFunc && this.onPathNameClickFunc(path);
