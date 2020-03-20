@@ -51,8 +51,8 @@
 		<span class="pathName">{{getCareerGoalName()}}</span>
 		<div *ngIf="getCareerGoalPaths(cg).length === 0"><br/><br/>None of the questions you've been asked are a match for this path, and this filter.<br/><br/></div>
 		<ion-card-content class="purpleBackground" *ngFor="let path of getCareerGoalPaths(cg)">
-			<!-- <span class="pathName" (click)="onPathNameClick(path)">{{path['name']}}</span><br/> -->
-			<span class="pathName">{{path['name']}}</span><br/>
+			<span class="pathName" (click)="onPathNameClick(path)">{{path['name']}}</span><br/>
+			<!-- <span class="pathName">{{path['name']}}</span><br/> -->
 			<ion-card-content class="greenBackground" *ngFor="let milestone of getMilestonesFromPath(path)">
 				<!-- <span class="milestoneName" (click)="onMilestoneNameClick(milestone)">{{milestone['name']}}</span><br/> -->
 				<span class="milestoneName" >{{milestone['name']}}</span><br/>

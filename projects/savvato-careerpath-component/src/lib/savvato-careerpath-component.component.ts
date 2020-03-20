@@ -23,6 +23,8 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
   user = undefined;
   userId = undefined;
 
+  onPathNameClickFunc = undefined;
+
   funcKey = "careerpath-controller1Xr7";
 
   constructor(private _router: Router,
@@ -47,6 +49,7 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
         self._modelService._init(ctrl.getEnv());
         
         self.getCareerGoalProviderFunction = ctrl.getCareerGoalProviderFunction;
+        self.onPathNameClickFunc = ctrl.onPathNameClick;
 
         if (!ctrl.getUser) {
           self._modelService.setAnswerQualityFilter(self._modelService.NO_FILTER);
@@ -205,14 +208,14 @@ export class SavvatoCareerpathComponentComponent implements OnInit {
     this._modelService.setAnswerQualityFilter(evt.target.value);
   }
 
-  /*
-  Provide user-defined handlers for these
+
+//  Provide user-defined handlers for these
 
   onPathNameClick(path) {
-    this._router.navigate(['/paths/display/' + path['id']]);
+    this.onPathNameClickFunc && this.onPathNameClickFunc(path);
   }
 
-  onMilestoneNameClick(milestone) {
+/*  onMilestoneNameClick(milestone) {
     this._router.navigate(['/milestones/display/' + milestone['id']]);
   }
 
